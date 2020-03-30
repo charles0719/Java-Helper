@@ -1,4 +1,6 @@
-# leetcode解题
+# LeetCode算法练习
+
+# 栈，队列
 
 ## 20. 有效的括号
 
@@ -195,6 +197,8 @@ class MyQueue {
     }
 ```
 
+# Map和Set
+
 ## 242 有效的字母异位词
 
 给定两个字符串 *s* 和 *t* ，编写一个函数来判断 *t* 是否是 *s* 的字母异位词。
@@ -280,15 +284,113 @@ public int majorityElement(int[] nums) {
 
 最后能剩下的必定是自己人。
 
+# 链表
+
 ## 面试题24 反转链表
 
 定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
 
 ### 核心思路
 
+- 链表的操作
 
+### 代码1--非递归
+
+```java
+ListNode cur = head;
+        ListNode pre = null;
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+```
+
+### 代码2--递归
+
+```java
+private ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode newHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
+    }
+```
+
+## [203. 移除链表元素](https://leetcode-cn.com/problems/remove-linked-list-elements/)
+
+### 核心思路
+
+- 使用dummyHead
+- 对于移除head节点的数据，要进行特殊处理
+- 对于不等于val的值，cur=cur.next
 
 ### 代码
+
+```java
+		ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+        ListNode cur = dummyHead;
+        while (cur.next != null) {
+            if (cur.next.val == val) {
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
+            }
+        }
+        return dummyHead.next;
+```
+
+## [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
+
+### 核心思路
+
+- 使用dummyHead，避免对头指针进行特殊操作
+- 指针的方向换了之后，对下一个节点的操作进行切换
+
+### 代码
+
+```java
+private ListNode swapPairs(ListNode head) {
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+        ListNode pre = dummyHead;
+        while (pre.next != null && pre.next.next != null) {
+            ListNode node1 = pre.next;
+            ListNode node2 = node1.next;
+            ListNode next = node2.next;
+
+            node1.next = next;
+            pre.next = node2;
+            node2.next = node1;
+            
+            pre = node1;
+        }
+        return dummyHead.next;
+    }
+```
+
+## [237. 删除链表中的节点](https://leetcode-cn.com/problems/delete-node-in-a-linked-list/)
+
+### 核心思路
+
+- 对于尾指针不适用
+
+### 代码
+
+```java
+    private void deleteNode1(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+```
+
+# 递归
 
 ## 50. Pow(x, n)
 
@@ -322,6 +424,8 @@ int b = a*-1;//-2147483648
 int c = a-1;//2147483647
 ```
 
+# 贪心算法
+
 ## 122. 买卖股票的最佳时机 II
 
 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
@@ -352,11 +456,60 @@ public int maxProfit(int[] prices) {
     }
 ```
 
+# 二叉树
+
 ## [102. 二叉树的层次遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
 
 ### 核心思路
 
-
+- 队列记录
+- 上一层的数据用完就扔
 
 ### 代码
+
+```java
+List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return res;
+        }
+        Queue<TreeNode> q = new LinkedList<TreeNode>();
+        q.offer(root);
+        while (!q.isEmpty()) {
+            int count = q.size();
+            List<Integer> list = new ArrayList<Integer>();
+            while (count > 0) {
+                TreeNode temp = q.poll();
+                list.add(temp.val);
+                if (temp.left != null) {
+                    q.add(temp.left);
+                }
+                if (temp.right != null) {
+                    q.add(temp.right);
+                }
+                count--;
+
+            }
+            res.add(list);
+
+        }
+        return res;
+    }
+```
+
+## [104. 二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/)
+
+### 核心思路
+
+- 递归
+
+### 代码
+
+```java
+ public int maxDepth(TreeNode root) {
+        if (root == null)
+            return 0;
+        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+    }
+```
 
