@@ -1,4 +1,62 @@
 # LeetCode算法练习
+# 数组
+
+## [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/)
+
+### 核心思路
+
+- 使用int k =0 记录所有不是0的数据
+- 可以使用直接赋值的方法或者交换数组的方法
+
+### 代码
+
+```java
+    public void moveZeroes(int[] arr) {
+        int k = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != 0) {
+                if (k != i) {
+                    swap(arr, k++, i);
+                } else {
+                    k++;
+                }
+            }
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) 	{
+        int t = nums[i];
+        nums[i] = nums[j];
+        nums[j] = t;
+    }
+```
+
+## [912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
+
+给你一个整数数组 `nums`，请你将该数组升序排列。
+
+### 核心思路
+
+- 桶排序
+- 初始化的数组长度
+- 索引即值
+
+### 代码
+
+```java
+     void bucketSort(int[] arr){
+        int[] bk = new int[50000 * 2 + 1];
+        for(int i = 0; i < arr.length; i++){
+            bk[arr[i] + 50000] += 1;
+        }
+        int ar = 0;
+        for(int i = 0; i < bk.length; i++){
+            for(int j = bk[i]; j > 0; j--){
+                arr[ar++] = i - 50000;
+            }
+        }
+    }
+```
 
 # 栈，队列
 
@@ -192,6 +250,30 @@ class MyQueue {
             if (i >= k - 1) {
                 res[i - k + 1] = p.peek();
             }
+        }
+        return res;
+    }
+```
+
+## [面试题40. 最小的k个数](https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/)
+
+输入整数数组 `arr` ，找出其中最小的 `k` 个数。例如，输入4、5、1、6、2、7、3、8这8个数字，则最小的4个数字是1、2、3、4。
+
+### 核心思路
+
+- 优先队列
+
+### 代码
+
+```java
+    public int[] getLeastNumbers(int[] arr, int k) {
+        PriorityQueue<Integer> p = new PriorityQueue();
+        for (int num : arr) {
+            p.add(num);
+        }
+        int[] res = new int[k];
+        for (int i = 0; i < k; i++) {
+            res[i] = p.poll();
         }
         return res;
     }
@@ -512,4 +594,152 @@ List<List<Integer>> res = new ArrayList<>();
         return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
     }
 ```
+
+## [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
+
+### 核心思路
+
+- 递归
+
+### 代码
+
+```java
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+```
+
+## [112. 路径总和](https://leetcode-cn.com/problems/path-sum/)
+
+给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。
+
+### 核心思路
+
+- 叶子结点
+- 空节点
+- 非叶子和非空节点
+
+### 代码
+
+```java
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root == null) {
+            return false;
+        }
+        int val = root.val;
+        if (root.left == null && root.right == null) {
+            return val == sum;
+        }
+        return hasPathSum(root.left, sum - val) || hasPathSum(root.right, sum - val);
+    }
+```
+
+## [257. 二叉树的所有路径](https://leetcode-cn.com/problems/binary-tree-paths/)
+
+给定一个二叉树，返回所有从根节点到叶子节点的路径。
+
+**说明:** 叶子节点是指没有子节点的节点。
+
+### 核心思路
+
+- 分析叶子结点和空节点的情况
+
+### 代码
+
+```java
+public List<String> binaryTreePaths(TreeNode root) {
+        ArrayList<String> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        if (root.left == null && root.right == null) {
+            res.add(root.val + "");
+            return res;
+        }
+        List<String> leftRes = binaryTreePaths(root.left);
+        for (String str : leftRes) {
+            res.add(root.val + "->" + str);
+        }
+        List<String> rightRes = binaryTreePaths(root.right);
+        for (String str : rightRes) {
+            res.add(root.val + "->" + str);
+        }
+        return res;
+
+    }
+```
+
+## [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/)
+
+给定一个二叉树，它的每个结点都存放着一个整数值。
+
+找出路径和等于给定数值的路径总数。
+
+路径不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+
+二叉树不超过1000个节点，且节点数值范围是 [-1000000,1000000] 的整数。
+
+### 核心思路
+
+- findPath找到根是root节点的所有路径
+
+### 代码
+
+```java
+    public int pathSum(TreeNode root, int sum) {
+        if (root == null) {
+            return 0;
+        }
+        return findPath1(root, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
+    }
+
+    private int findPath(TreeNode root, int sum) {
+        if (root == null) {
+            return 0;
+        }
+        int res = 0;
+
+        if (root.val == sum) {
+            res += 1;
+        }
+
+        return res + findPath(root.left, sum - root.val) + findPath(root.right, sum - root.val);
+    }
+```
+
+## [235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+
+给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+
+### 核心思路
+
+- p的值和q的值在root的两边，返回root（包含root是p或者q节点）
+- p的值和q的值在root的一边，返回root的left或者right
+
+### 代码
+
+```java
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+         if (root == null) {
+            return null;
+        }
+        if (root.val > p.val && root.val > q.val) {
+            return lowestCommonAncestor(root.left, p, q);
+        }
+        if (root.val < p.val && root.val < q.val) {
+            return lowestCommonAncestor(root.right, p, q);
+        }
+        return root;
+    }
+```
+
+
 
