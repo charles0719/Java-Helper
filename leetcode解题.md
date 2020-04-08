@@ -1,4 +1,34 @@
 # LeetCode算法练习
+
+# 字符串
+
+## [7. 整数反转](https://leetcode-cn.com/problems/reverse-integer/)
+
+给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。
+
+### 核心思路
+
+- 获取每个位数的数值
+- 用long存储反转数值，和Integer的最大值和最小值进行比较
+
+### 代码
+
+```java
+ public int reverse(int x) {
+        int term;
+        long b = 0;
+        while (x != 0) {
+            term = x % 10;
+            x = x / 10;
+            b = b*10 + term;
+        }
+        if(b > Integer.MAX_VALUE || b < Integer.MIN_VALUE) {
+            return 0;
+        }
+        return (int) b;
+    }
+```
+
 # 数组
 
 ## [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/)
@@ -60,7 +90,15 @@
 
 # 栈，队列
 
-## 20. 有效的括号
+## [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
+
+给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+
+有效字符串需满足：
+
+左括号必须用相同类型的右括号闭合。
+左括号必须以正确的顺序闭合。
+注意空字符串可被认为是有效字符串。
 
 ### 核心思路
 
@@ -96,7 +134,7 @@ class Solution {
 }
 ```
 
-## 703 数据流中的第K大元素
+## [703. 数据流中的第K大元素](https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/)
 
 设计一个找到数据流中第K大元素的类（class）。注意是排序后的第K大元素，不是第K个不同的元素。
 
@@ -134,7 +172,7 @@ class KthLargest {
 }
 ```
 
-## 232 用栈实现队列
+## [232. 用栈实现队列](https://leetcode-cn.com/problems/implement-queue-using-stacks/)
 
 使用栈实现队列的下列操作：
 
@@ -214,7 +252,7 @@ class MyQueue {
 }
 ```
 
-## 239 滑动窗口最大值
+## [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
 
 给定一个数组 *nums*，有一个大小为 *k* 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 *k* 个数字。滑动窗口每次只向右移动一位。
 
@@ -281,7 +319,7 @@ class MyQueue {
 
 # Map和Set
 
-## 242 有效的字母异位词
+## [242. 有效的字母异位词](https://leetcode-cn.com/problems/valid-anagram/)
 
 给定两个字符串 *s* 和 *t* ，编写一个函数来判断 *t* 是否是 *s* 的字母异位词。
 
@@ -326,7 +364,7 @@ public boolean isAnagram(String s, String t) {
     }
 ```
 
-## 169 多数元素
+## [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
 
 ### 核心思路
 
@@ -368,7 +406,7 @@ public int majorityElement(int[] nums) {
 
 # 链表
 
-## 面试题24 反转链表
+## [面试题24. 反转链表](https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/)
 
 定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
 
@@ -474,7 +512,7 @@ private ListNode swapPairs(ListNode head) {
 
 # 递归
 
-## 50. Pow(x, n)
+## [50. Pow(x, n)](https://leetcode-cn.com/problems/powx-n/)
 
 实现 [pow(*x*, *n*)](https://www.cplusplus.com/reference/valarray/pow/) ，即计算 x 的 n 次幂函数。
 
@@ -506,9 +544,216 @@ int b = a*-1;//-2147483648
 int c = a-1;//2147483647
 ```
 
+## [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
+
+### 核心思路
+
+- 递归函数里面的index代表着遍历到了字符串的第几个字符，str代表着进入递归函数的进行拼接的字符串
+
+### 代码
+
+```java
+    private static HashMap<Character, String> map;
+
+    static {
+        map = new HashMap<>();
+        map.put('2', "abc");
+        map.put('3', "def");
+        map.put('4', "ghi");
+        map.put('5', "jkl");
+        map.put('6', "mno");
+        map.put('7', "pqrs");
+        map.put('8', "tuv");
+        map.put('9', "wxyz");
+        map.put('0', " ");
+        map.put('1', "");
+    }
+
+    private ArrayList<String> res;
+
+    public List<String> letterCombinations(String digits) {
+        res = new ArrayList<>();
+        if(digits.equals(""))
+            return res;
+        findStr(digits, 0, "");
+        return res;
+    }
+
+    private void findStr(String digits, int index, String str) {
+        if (index == digits.length()) {
+            res.add(str);
+            return;
+        }
+        Character c = digits.charAt(index);
+        String letter = map.get(c);
+        for (int i = 0; i < letter.length(); i++) {
+            findStr(digits, index + 1,  str+letter.charAt(i));
+        }
+    }
+```
+
+## [46. 全排列](https://leetcode-cn.com/problems/permutations/)
+
+### 核心思路
+
+- 使用used记录元素是否被使用过
+- 递归函数的参数：list是被存储的单元数据，index是存放第n个元素
+
+### 代码
+
+```java
+    private ArrayList<List<Integer>> res;
+    private boolean[] used;
+    public List<List<Integer>> permute(int[] nums) {
+        LinkedList<Integer> list = new LinkedList<>();
+        res = new ArrayList<List<Integer>>();
+        if (nums == null || nums.length == 0) {
+            return res;
+        }
+        used = new boolean[nums.length];
+        genPerm(nums, 0, list);
+        return res;
+    }
+     private void genPerm(int[] nums, int index, LinkedList<Integer> list) {
+        if (index == nums.length) {
+            res.add((LinkedList<Integer>) list.clone());
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (!used[i]) {
+                used[i] = true;
+                list.addLast(nums[i]);
+                genPerm(nums, index + 1, list);
+                used[i] = false;
+                list.removeLast();
+            }
+        }
+    }
+```
+
+## [77. 组合](https://leetcode-cn.com/problems/combinations/)
+
+给定两个整数 *n* 和 *k*，返回 1 ... *n* 中所有可能的 *k* 个数的组合。
+
+### 核心思路
+
+- 边界判定
+
+- 递归参数
+- start参数比较特别，当前插入数组的元素。
+
+### 代码
+
+```java
+    private ArrayList<List<Integer>> res;
+    public List<List<Integer>> combine(int n, int k) {
+        res = new ArrayList<>();
+        LinkedList<Integer> list = new LinkedList<>();
+        if (n <= 0 || k <= 0 || n < k) {
+            return res;
+        }
+        doCombine(n, k, 1, list);
+        return res;
+    }
+    private void doCombine(int n, int k, int start, LinkedList<Integer> list) {
+        if (list.size() == k) {
+            res.add((List<Integer>) list.clone());
+            return;
+        }
+        for (int i = start; i <= n; i++) {
+            list.addLast(i);
+            doCombine(n, k, i + 1, list);
+            list.removeLast();
+        }
+    }
+```
+
+## [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
+
+给定一个二维网格和一个单词，找出该单词是否存在于网格中。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+ 
+
+示例:
+
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+给定 word = "ABCCED", 返回 true
+给定 word = "SEE", 返回 true
+给定 word = "ABCB", 返回 false
+
+### 核心思路
+
+- 二维数组
+- 记录访问过的图标
+- index用于记录word的第n的字符
+- inArea用于判断坐标是否在board之间
+
+### 代码
+
+```java
+ private int[][] d = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    private int m, n;
+    private boolean[][] visited;
+
+    public boolean exist(char[][] board, String word) {
+        if (board == null || word == null) {
+            return false;
+        }
+        m = board.length;
+        if (m == 0) {
+            return false;
+        }
+        n = board[0].length;
+        if (n == 0) {
+            return false;
+        }
+        visited = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (findWord(board, word, 0, i, j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean findWord(char[][] board, String word, int index, int startx, int starty) {
+        if (index == word.length() - 1) {
+            return board[startx][starty] == word.charAt(index);
+        }
+        if (board[startx][starty] == word.charAt(index)) {
+            visited[startx][starty] = true;
+            for (int i = 0; i < d.length; i++) {
+                int x = startx + d[i][0];
+                int y = starty + d[i][1];
+                if (inArea(x, y) && !visited[x][y] && findWord(board, word, index + 1, x, y)) {
+                    return true;
+                }
+            }
+            visited[startx][starty] = false;
+        }
+        return false;
+    }
+
+    private boolean inArea(int x, int y) {
+        return x >= 0 && x < m && y >= 0 && y < n;
+    }
+```
+
+
+
 # 贪心算法
 
-## 122. 买卖股票的最佳时机 II
+## [122. 买卖股票的最佳时机 II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
 
 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
 
@@ -741,5 +986,104 @@ public List<String> binaryTreePaths(TreeNode root) {
     }
 ```
 
+# 动态规划
 
+## [509. 斐波那契数](https://leetcode-cn.com/problems/fibonacci-number/)
+
+- 自上向下解决
+- 自下向上解决
+- 使用数组记录，由于使用memo[n]所以创建数组使用memo[n+1]
+
+
+### 代码1
+```java
+    public int fib(int N) {
+        if (N == 0 || N == 1) {
+            return N;
+        }
+        int[] memos = new int[N + 1];
+        memos[1] = 1;
+        memos[0] = 0;
+        for (int i = 2; i <= N; i++) {
+            memos[i] = memos[i - 1] + memos[i - 2];
+        }
+        return memos[N];
+    }
+```
+
+### 代码2
+
+```java
+    public int fib(int n) {
+        int[] memos = new int[n + 1];
+        int res = fib(n, memos);
+        return res;
+    }
+
+    public int fib(int n ,int[] memos){
+        if (n == 1 || n == 0) {
+            return n;
+        }
+        if (memos[n] == 0) {
+            memos[n] = fib(n - 1, memos) + fib(n - 2, memos);
+        }
+        return memos[n];
+    }
+```
+
+## [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+
+假设你正在爬楼梯。需要 *n* 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+**注意：**给定 *n* 是一个正整数。
+
+### 核心思路
+
+上同
+
+### 代码
+
+```java
+    public int climbStairs(int n) {
+        int[] res = new int[n + 1];
+        res[0] = 1;
+        res[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            res[i] = res[i - 1] + res[i - 2];
+        }
+        System.out.println(Arrays.toString(res));
+        return res[n];
+    }
+```
+
+
+
+## [343. 整数拆分](https://leetcode-cn.com/problems/integer-break/)
+
+### 核心思路
+
+- 使用数组记录数据
+- 记录初始数据，不断计算memo[n]的数值
+- 不断使用高阶的integerBreak去调用低阶，最低阶的直接return
+
+### 代码
+
+```java
+    public int integerBreak(int n) {
+        int[] memo = new int[n + 1];
+        memo[1] = 1;
+        for (int j = 2; j <= n; j++) {
+            for (int i = 1; i <= j - 1; i++) {
+                memo[j] = max3(memo[j - i] * i, memo[j], (j - i) * i);
+            }
+        }
+        return memo[n];
+    }
+    
+    private int max3(int a, int b, int c) {
+        return Math.max(a, Math.max(b, c));
+    }
+```
 
