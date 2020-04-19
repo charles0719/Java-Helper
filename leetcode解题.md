@@ -29,7 +29,218 @@
     }
 ```
 
+## [面试题 01.01. 判定字符是否唯一](https://leetcode-cn.com/problems/is-unique-lcci/)
+
+实现一个算法，确定一个字符串 `s` 的所有字符是否全都不同。
+
+### 核心思路
+
+set用来判重，map用来计数
+
+### 代码
+
+```java
+    public boolean isUnique(String astr) {
+        Set<Character> set = new HashSet<>();
+        for (Character c : astr.toCharArray()) {
+            set.add(c);
+        }
+        return astr.length() == set.size();
+    }
+```
+
+## [面试题 01.06. 字符串压缩](https://leetcode-cn.com/problems/compress-string-lcci/)
+
+字符串压缩。利用字符重复出现的次数，编写一种方法，实现基本的字符串压缩功能。比如，字符串aabcccccaaa会变为a2b1c5a3。若“压缩”后的字符串没有变短，则返回原先的字符串。你可以假设字符串中只包含大小写英文字母（a至z）。
+
+### 核心思路
+
+- 字符比较，计数
+
+### 代码
+
+```java
+public String compressString(String S) {
+        if (S.length() == 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        char ch = S.charAt(0);
+        int count = 1;
+        for (int i = 1; i < S.length(); i++) {
+            char c = S.charAt(i);
+            if (ch == c) {
+                count++;
+            } else {
+                sb.append("" + ch + count);
+                ch = c;
+                count = 1;
+            }
+        }
+        sb.append("" + ch + count);
+        return sb.length() < S.length() ? sb.toString() : S;
+    }
+```
+
+## [面试题 01.03. URL化](https://leetcode-cn.com/problems/string-to-url-lcci/)
+
+URL化。编写一种方法，将字符串中的空格全部替换为%20。假定该字符串尾部有足够的空间存放新增字符，并且知道字符串的“真实”长度。（注：用Java实现的话，请使用字符数组实现，以便直接在数组上操作。）
+
+### 核心思路
+
+- 理解题意
+
+### 代码
+
+```java
+public String replaceSpaces(String S, int length) {
+        return S.substring(0,length).replaceAll(" ","%20");
+    }
+```
+
+## [面试题 01.09. 字符串轮转](https://leetcode-cn.com/problems/string-rotation-lcci/)
+
+字符串轮转。给定两个字符串`s1`和`s2`，请编写代码检查`s2`是否为`s1`旋转而成（比如，`waterbottle`是`erbottlewat`旋转后的字符串）
+
+### 核心思路
+
+- (s1+s1).contains(s2);
+
+### 代码
+
+```java
+public boolean isFlipedString(String s1, String s2) {
+        return s1.length()==s2.length()&&(s1+s1).contains(s2);
+    }
+```
+
+## [面试题 01.04. 回文排列](https://leetcode-cn.com/problems/palindrome-permutation-lcci/)
+
+### 核心思路
+
+- 消消乐
+
+### 代码
+
+```java
+    public boolean canPermutePalindrome(String s) {
+        char[] chars = s.toCharArray();
+        HashSet set = new HashSet();
+
+        for (char c : chars) {
+            if (set.contains(c)) {
+                set.remove(c);
+            } else {
+                set.add(c);
+            }
+        }
+        return set.size() <= 1;
+    }
+```
+
 # 数组
+
+## [27. 移除元素](https://leetcode-cn.com/problems/remove-element/)
+
+### 核心思路
+
+- 使用index记录非0元素的坐标
+
+### 代码
+
+```java
+    private int removeElement(int[] nums, int val) {
+        int index = 0;
+        for (int num : nums) {
+            if (num != val) {
+                nums[index] =num;
+                index++;
+            }
+        }
+        return index;
+    }
+```
+
+## [26. 删除排序数组中的重复项](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
+
+### 核心思路
+
+- 快慢指针，慢指针记录不重复的数据
+
+### 代码
+
+```java
+    public int removeDuplicates(int[] nums) {
+        int k = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i > 0) {
+                if (nums[i] != nums[i - 1]) {
+                    nums[k] = nums[i];
+                    k++;
+                }
+            } else {
+                k++;
+            }
+        }
+        return k;
+    }
+```
+
+## [80. 删除排序数组中的重复项 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/)
+
+### 核心思路
+
+- 使用pos记录数组有效长度
+
+### 代码
+
+```java
+        int len = nums.length;
+        if (len < 3) return len;
+        int pos = 2;
+        for (int i = 2; i < len; i++) {
+            if (nums[i] != nums[pos - 2]) {
+                nums[pos] = nums[i];
+                pos++;
+            }
+        System.out.println(Arrays.toString(nums));
+        }
+        return pos;
+```
+
+## [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)
+
+### 核心思路
+
+- 使用计数排序，索引即val
+- 使用三路快排。如果大于val，等于val，小于val的处理
+
+### 代码
+
+```java
+    public void sortColors(int[] nums) {
+        int zero = -1;
+        int two = nums.length;
+        for (int i = 0; i < two; ) {
+            if (nums[i] == 0) {
+                zero++;
+                swap(nums, zero, i++);
+            } else if (nums[i] == 1) {
+                i++;
+            } else {
+                two--;
+                swap(nums, i, two);
+            }
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int t = nums[i];
+        nums[i] = nums[j];
+        nums[j] = t;
+    }
+```
+
 
 ## [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/)
 
@@ -87,6 +298,68 @@
         }
     }
 ```
+
+## [167. 两数之和 II - 输入有序数组](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
+
+### 核心思路
+
+- 双向指针
+- 确定一个点，然后二分搜索
+
+### 代码
+
+```java
+    public int[] twoSum(int[] numbers, int target) {
+        int i = 0, j = numbers.length - 1;
+        while (i < j) {
+            if (numbers[i] + numbers[j] == target) {
+                int[] res = {i + 1, j + 1};
+                return res;
+            } else if (numbers[i] + numbers[j] < target) {
+                i++;
+            } else {
+                j--;
+            }
+        }
+        return new int[2];
+    }
+```
+
+## [面试题 01.07. 旋转矩阵](https://leetcode-cn.com/problems/rotate-matrix-lcci/)
+
+给你一幅由 `N × N` 矩阵表示的图像，其中每个像素的大小为 4 字节。请你设计一种算法，将图像旋转 90 度。
+
+### 核心思路
+
+- 沿对角线翻转
+- 沿中心翻转
+
+### 代码
+
+```java
+	public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+
+        int mid = n >> 1;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < mid; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[i][n - 1 - j];
+                matrix[i][n - 1 - j] = temp;
+            }
+
+        }
+    }
+```
+
+
 
 # 栈，队列
 
@@ -405,6 +678,82 @@ public int majorityElement(int[] nums) {
 最后能剩下的必定是自己人。
 
 # 链表
+
+## [面试题 02.01. 移除重复节点](https://leetcode-cn.com/problems/remove-duplicate-node-lcci/)
+
+编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+
+### 核心思路
+
+- 删除节点和记录节点数据
+
+### 代码
+
+```java
+    public ListNode removeDuplicateNodes(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        Set<Integer> set = new HashSet<>();
+        set.add(head.val);
+        ListNode cur = head;
+        while (cur.next != null) {
+            if (set.contains(cur.next.val)) {
+                cur.next = cur.next.next;
+            } else {
+                set.add(cur.next.val);
+                cur = cur.next;
+            }
+        }
+        return head;
+    }
+```
+
+## [面试题 02.06. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list-lcci/)
+
+编写一个函数，检查输入的链表是否是回文的。
+
+### 核心思路
+
+- 找到中心节点，反转链表，判断值
+
+### 代码
+
+```java
+public boolean isPalindrome(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        System.out.println(fast);
+        ListNode pre = reverseLinkedList(slow);
+        while (pre != null && head != null) {
+            if (pre.val != head.val) {
+                return false;
+            }
+            pre = pre.next;
+            head = head.next;
+        }
+
+        return true;
+    }
+
+    public ListNode reverseLinkedList(ListNode node) {
+        ListNode pre = null;
+        ListNode cur = node;
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+```
+
+
 
 ## [面试题24. 反转链表](https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/)
 
@@ -749,7 +1098,112 @@ board =
     }
 ```
 
+## [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
+### 核心思路
+
+- 判断该点是否被访问过或者该点是否是1，另外新节点需要判断是否在区域中
+
+### 代码
+
+```java
+	int m, n;
+    boolean[][] visited;
+    private int d[][] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        m = grid.length;
+        n = grid[0].length;
+        visited = new boolean[m][n];
+        int res = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (!visited[i][j] && grid[i][j] == '1') {
+                    dfs(grid, i, j);
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    private void dfs(char[][] grid, int x, int y) {
+        visited[x][y] = true;
+        for (int i = 0; i < d.length; i++) {
+            int newX = x + d[i][0];
+            int newY = y + d[i][1];
+            if (inArea(newX, newY) && !visited[newX][newY] && grid[newX][newY] == '1') {
+                dfs(grid, newX, newY);
+            }
+        }
+    }
+
+    private boolean inArea(int x, int y) {
+        return x >= 0 && x < m && y >= 0 && y < n;
+    }
+```
+
+## [51. N皇后](https://leetcode-cn.com/problems/n-queens/)
+
+### 核心思路
+
+- 使用list去存储单个N皇后的解，加入res中。
+- 使用dia，col，去判定在斜线和列上没有在一条线上
+
+### 代码
+
+```java
+    private ArrayList<List<String>> res;
+    private boolean[] col;
+    private boolean[] dia1;
+    private boolean[] dia2;
+
+    public List<List<String>> solveNQueens(int n) {
+
+        res = new ArrayList<>();
+        col = new boolean[n];
+        dia1 = new boolean[2 * n - 1];
+        dia2 = new boolean[2 * n - 1];
+
+        LinkedList<Integer> list = new LinkedList<>();
+        putQueen(n, 0, list);
+        return res;
+    }
+
+    private void putQueen(int n, int index, LinkedList<Integer> list) {
+        if (n == index) {
+            res.add(genBoard(n, list));
+            return;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!col[i] && !dia1[index + i] && !dia2[n - 1 - index + i]) {
+                list.addLast(i);
+                col[i] = true;
+                dia1[index + i] = true;
+                dia2[n - 1 - index + i] = true;
+                putQueen(n, index + 1, list);
+                col[i] = false;
+                dia1[index + i] = false;
+                dia2[n - 1 - index + i] = false;
+                list.removeLast();
+            }
+        }
+    }
+
+    public List<String> genBoard(int n, LinkedList<Integer> list) {
+        List<String> board = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            char[] chars = new char[n];
+            Arrays.fill(chars, '.');
+            chars[list.get(i)] = 'Q';
+            board.add(new String(chars));
+        }
+        return board;
+    }
+```
 
 # 贪心算法
 
